@@ -2,7 +2,6 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { CheckboxFiltersGroup, FilterCheckbox, RangeSlider, Title } from ".";
 import { Input } from "../ui";
-import data from "@/lib/leafly_strain_data.json";
 
 import { effectTypes } from "@/lib/effects";
 

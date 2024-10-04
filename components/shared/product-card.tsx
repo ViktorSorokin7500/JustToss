@@ -8,8 +8,11 @@ import { Plus } from "lucide-react";
 interface Props {
   id: number;
   name: string;
-  price: number;
+  price: number | string;
   imageUrl: string;
+  type: string;
+  thc: string;
+  terpene: string;
   className?: string;
 }
 
@@ -18,29 +21,40 @@ export const ProductCard: React.FC<Props> = ({
   name,
   price,
   imageUrl,
+  type,
+  terpene,
+  thc,
   className,
 }) => {
   return (
     <div className={cn(className)}>
       <Link href={`/product/${id}`}>
-        <div className="flex justify-center p-6 bg-secondary rounded-lg h-[260px]">
-          <img className="size-[215px]" src={imageUrl} alt={name} />
+        <div className="flex justify-center p-6 bg-green-50 rounded-lg h-[260px]">
+          <img
+            className="size-[215px] rounded-full"
+            src={imageUrl}
+            alt={name}
+          />
         </div>
 
-        <Title text={name} size="sm" className="mb-1 mt-3 font-bold" />
+        <Title
+          text={name}
+          size="sm"
+          className="mb-1 mt-3 font-bold text-center"
+        />
 
-        <div className="flex justify-around">
+        <div className="flex justify-between">
           <p>
-            <b>Type:</b> Sativa
+            <b>Type:</b> {type}
           </p>
           <p>
-            <b>THC:</b> 21
+            <b>THC:</b> {thc}%
           </p>
         </div>
         <p className="text-center">
-          <b>Terpene:</b> Caryophyllene
+          <b>Terpene:</b> {terpene}
         </p>
-        <div className="flex justify-center items-center mt-4">
+        <div className="flex justify-between items-center mt-4">
           <span className="text-[20px]">
             from <b>${price}</b>
           </span>
