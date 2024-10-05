@@ -1,10 +1,9 @@
 import React from "react";
-import { cn } from "@/lib/utils";
 
-interface Props {
-  className?: string;
+export default function ProductPage({
+  params: { id },
+}: {
+  params: { id: string };
+}) {
+  return <div>Product {id}</div>;
 }
-
-export const ProductPage: React.FC<Props> = ({ className }) => {
-  return <div className={cn(className)}></div>;
-};

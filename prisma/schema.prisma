@@ -48,6 +48,8 @@ model Product {
   CartItem CartItem[]
 }
 
+
+
 model Cart {
   id Int @id @default(autoincrement())
 

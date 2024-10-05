@@ -16,6 +16,7 @@ export const RenderFilterGroup: React.FC<Props> = ({ title, items }) => {
         limit={6}
         items={items}
         defaultItems={defaultItems}
+        loading={false}
       />
     </>
   );
