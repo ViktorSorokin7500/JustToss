@@ -9,7 +9,7 @@ interface Props {
   id: number;
   name: string;
   price: number | string;
-  imageUrl: string;
+  imageUrl: string | undefined;
   type: string;
   thc: string;
   terpene: string;

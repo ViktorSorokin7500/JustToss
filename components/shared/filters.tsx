@@ -1,46 +1,44 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { CheckboxFiltersGroup, FilterCheckbox, RangeSlider, Title } from ".";
+import { RangeSlider, RenderFilterGroup, SortPopup, Title } from ".";
 import { Input } from "../ui";
-
-import { effectTypes } from "@/lib/effects";
+import { effectTypes, terpene, types } from "@/lib/data_details";
+import { useFilterItems } from "@/hooks";
 
 interface Props {
   className?: string;
 }
 
 export const Filters: React.FC<Props> = ({ className }) => {
-  const items = effectTypes.map((effect, i) => ({
-    text: effect,
-    value: (i + 1).toString(),
-  }));
+  const effectItems = useFilterItems(effectTypes);
+  const terpeneItems = useFilterItems(terpene);
+  const typeItems = useFilterItems(types);
 
   return (
     <div className={cn(className)}>
-      <Title text="Fliters" size="sm" className="mb-5 font-bold" />
+      <Title text="Fliters" size="md" className="font-bold" />
+      <div className="space-y-3">
+        <SortPopup className="w-full" />
+        <div>
+          <p className="font-bold mb-3">Price:</p>
+          <div className="flex gap-3 mb-5">
+            <Input type="number" placeholder="0" min={0} max={10} />
+            <Input type="number" placeholder="10" min={1} max={10} />
+          </div>
 
-      <div className="flex flex-col gap-4">
-        <FilterCheckbox text="New" value="1" />
-      </div>
-
-      <div className="mt-5 border-y border-y-neutral-100 py-6 pb-7">
-        <p className="font-bold mb-3">Price:</p>
-        <div className="flex gap-3 mb-5">
-          <Input type="number" placeholder="0" min={0} max={10} />
-          <Input type="number" placeholder="10" min={1} max={10} />
+          <RangeSlider
+            min={0}
+            max={10}
+            step={0.5}
+            value={[0, 10]}
+            className="pb-2"
+          />
         </div>
 
-        <RangeSlider min={0} max={10} step={0.5} value={[0, 10]} />
+        <RenderFilterGroup title="Type" items={typeItems} />
+        <RenderFilterGroup title="Terpene" items={terpeneItems} />
+        <RenderFilterGroup title="Effects" items={effectItems} />
       </div>
-
-      <CheckboxFiltersGroup
-        title="Effects"
-        className="mt-5"
-        limit={6}
-        items={items}
-        defaultItems={items.slice(0, 6)}
-      />
     </div>
   );
-  <div></div>;
 };

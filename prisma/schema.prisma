@@ -40,23 +40,12 @@ model Product {
 
   mostCommonTerpene String?
   
-  effects Effect[]
+  effects Json
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
 
-model Effect {
-  id Int @id @default(autoincrement())
-
-  product Product @relation(fields: [productId], references: [id])
-  productId Int
-
-  effectType EffectType
-  value Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  CartItem CartItem[]
 }
 
 model Cart {
@@ -136,34 +125,4 @@ enum OrderStatus {
 enum UserRole {
   USER
   ADMIN
-}
-
-enum EffectType {
-  RELAXED
-  HAPPY
-  EUPHORIC
-  UPLIFTED
-  SLEEPY
-  DRY_MOUTH
-  DRY_EYES
-  DIZZY
-  PARANOID
-  ANXIOUS
-  STRESS
-  PAIN
-  DEPRESSION
-  ANXIETY
-  INSOMNIA
-  HUNGRY
-  TALKATIVE
-  PTSD
-  CREATIVE
-  ENERGETIC
-  FATIGUE
-  FOCUSED
-  LACK_OF_APPETITE
-  HEADACHE
-  GIGGLY
-  NAUSEA
-  INFLAMMATION
 }
