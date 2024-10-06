@@ -1,19 +1,36 @@
 import { prisma } from "./prisma-client";
 import buds from "../lib/leafly_strain_data.json";
 import { hashSync } from "bcrypt";
+import { types, terpenes } from "../lib/data_details";
 
 async function up() {
+  const typeMap: { [key: string]: number } = {};
+  for (const type of types) {
+    const createdType = await prisma.type.create({
+      data: { name: type },
+    });
+    typeMap[type] = createdType.id;
+  }
+
+  const terpeneMap: { [key: string]: number } = {};
+  for (const terpene of terpenes) {
+    const createdTerpene = await prisma.terpene.create({
+      data: { name: terpene },
+    });
+    terpeneMap[terpene] = createdTerpene.id;
+  }
+
   await prisma.user.createMany({
     data: [
       {
-        fullname: "User Test",
+        fullName: "User Test",
         email: "user@test.com",
         password: hashSync("111111", 10),
         verified: new Date(),
         role: "USER",
       },
       {
-        fullname: "Admin Admin",
+        fullName: "Admin Admin",
         email: "admin@test.com",
         password: hashSync("111111", 10),
         verified: new Date(),
@@ -31,13 +48,29 @@ async function up() {
         name: product.name,
         price: product.price,
         imageUrl: product.img_url,
-        type: product.type,
+        typeId: typeMap[product.type],
         thcLevel: product.thc_level,
         description: product.description,
-        mostCommonTerpene: product.most_common_terpene,
+        terpeneId: terpeneMap[product.most_common_terpene.toLowerCase()],
         effects: product.effects,
         createdAt: new Date(),
         updatedAt: new Date(),
+      },
+    });
+  }
+
+  for (const type of types) {
+    await prisma.type.create({
+      data: {
+        name: type,
+      },
+    });
+  }
+
+  for (const terpene of terpenes) {
+    await prisma.terpene.create({
+      data: {
+        name: terpene,
       },
     });
   }

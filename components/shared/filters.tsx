@@ -2,7 +2,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { RangeSlider, RenderFilterGroup, SortPopup, Title } from ".";
 import { Input } from "../ui";
-import { effectTypes, terpene, types } from "@/lib/data_details";
+import { effectTypes, terpenes, types } from "@/lib/data_details";
 import { useFilterItems } from "@/hooks";
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 
 export const Filters: React.FC<Props> = ({ className }) => {
   const effectItems = useFilterItems(effectTypes);
-  const terpeneItems = useFilterItems(terpene);
+  const terpeneItems = useFilterItems(terpenes);
   const typeItems = useFilterItems(types);
 
   return (

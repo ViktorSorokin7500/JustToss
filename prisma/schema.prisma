@@ -11,7 +11,7 @@ datasource db {
 model User {
   id Int @id @default(autoincrement())
 
-  fullname String
+  fullName String
   email    String @unique
   password String
   role UserRole @default(USER)
@@ -29,26 +29,33 @@ model User {
 }
 
 model Product {
-  id Int @id @default(autoincrement())
-
-  name     String
-  price    Float
-  imageUrl String
-  type     String
-  thcLevel String
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       Float
+  imageUrl    String
+  typeId      Int
+  thcLevel    String
   description String
-
-  mostCommonTerpene String?
-  
-  effects Json
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  CartItem CartItem[]
+  terpeneId   Int?
+  effects     Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  CartItem    CartItem[]
+  type        Type     @relation(fields: [typeId], references: [id])
+  terpene     Terpene? @relation(fields: [terpeneId], references: [id])
 }
 
+model Terpene {
+  id       Int       @id @default(autoincrement())
+  name     String
+  products Product[]
+}
 
+model Type {
+  id       Int       @id @default(autoincrement())
+  name     String
+  products Product[]
+}
 
 model Cart {
   id Int @id @default(autoincrement())

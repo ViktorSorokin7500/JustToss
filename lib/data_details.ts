@@ -28,7 +28,7 @@ export const effectTypes = [
   "relaxed",
 ];
 
-export const terpene = [
+export const terpenes = [
   "caryophyllene",
   "limonene",
   "myrcene",
