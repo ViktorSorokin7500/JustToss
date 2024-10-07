@@ -12,6 +12,14 @@ interface Props {
 export const Filters: React.FC<Props> = ({ className }) => {
   const { effects, terpenes, types, loading } = useFilterData();
 
+  const [selectedTypes, setSelectedTypes] = React.useState<string[]>([]);
+  const [selectedTerpenes, setSelectedTerpenes] = React.useState<string[]>([]);
+  const [selectedEffects, setSelectedEffects] = React.useState<string[]>([]);
+
+  console.log("effects =>", selectedEffects);
+  console.log("terpenes =>", selectedTerpenes);
+  console.log("types =>", selectedTypes);
+
   const effectItems = effects.map((effect) => ({
     value: String(effect.id),
     text: effect.name.replace(/_/g, " "),
@@ -52,16 +60,27 @@ export const Filters: React.FC<Props> = ({ className }) => {
           title="Type"
           items={typeItems}
           loading={loading.types}
+          onChange={(values) => {
+            setSelectedTypes(values);
+          }}
         />
+
         <RenderFilterGroup
           title="Terpene"
           items={terpeneItems}
           loading={loading.terpenes}
+          onChange={(values) => {
+            setSelectedTerpenes(values);
+          }}
         />
+
         <RenderFilterGroup
           title="Effects"
           items={effectItems}
           loading={loading.effects}
+          onChange={(values) => {
+            setSelectedEffects(values);
+          }}
         />
       </div>
     </div>

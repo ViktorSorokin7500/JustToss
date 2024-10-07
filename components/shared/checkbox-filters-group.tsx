@@ -1,5 +1,4 @@
-"use client";
-
+// checkbox-filters-group.tsx
 import React from "react";
 import { cn } from "@/lib/utils";
 import { FilterChecboxProps, FilterCheckbox } from "./filter-checkbox";
@@ -14,7 +13,7 @@ interface Props {
   limit?: number;
   searchInputPlaceholder?: string;
   loading: boolean;
-  onChange?: (values: string[]) => void;
+  onChange: (values: string[]) => void;
   defaultValue?: string[];
   className?: string;
 }
@@ -33,11 +32,24 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
   const [showAll, setShowAll] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState("");
 
+  const [checkedValues, setCheckedValues] = React.useState<string[]>(
+    defaultValue || []
+  );
+
   const list = showAll
     ? items.filter((item) =>
         item.text.toLowerCase().includes(searchValue.toLowerCase())
       )
     : defaultItems.slice(0, limit);
+
+  const toggleCheckbox = (value: string) => {
+    const newCheckedValues = checkedValues.includes(value)
+      ? checkedValues.filter((v) => v !== value)
+      : [...checkedValues, value];
+
+    setCheckedValues(newCheckedValues);
+    onChange(newCheckedValues);
+  };
 
   const onChangeSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -77,9 +89,8 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
             key={index}
             text={item.text}
             value={item.value}
-            endAdornment={item.endAdornment}
-            checked={false}
-            onCheckedChange={(ids) => console.log(ids)}
+            checked={checkedValues.includes(item.value)}
+            onCheckedChange={() => toggleCheckbox(item.value)}
           />
         ))}
       </div>

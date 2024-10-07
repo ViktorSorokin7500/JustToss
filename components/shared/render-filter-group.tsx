@@ -5,12 +5,14 @@ interface Props {
   title: string;
   items: { text: string; value: string }[];
   loading: boolean;
+  onChange: (selectedValues: string[]) => void;
 }
 
 export const RenderFilterGroup: React.FC<Props> = ({
   title,
   items,
   loading,
+  onChange,
 }) => {
   const defaultItems = items.slice(0, 6);
   return (
@@ -22,6 +24,7 @@ export const RenderFilterGroup: React.FC<Props> = ({
         items={items}
         defaultItems={defaultItems}
         loading={loading}
+        onChange={onChange}
       />
     </>
   );
