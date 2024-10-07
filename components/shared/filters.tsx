@@ -2,18 +2,15 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { RangeSlider, RenderFilterGroup, SortPopup, Title } from ".";
 import { Input } from "../ui";
-import { effectTypes, terpenes, types } from "@/lib/data_details";
-import { useFilterItems } from "@/hooks";
+import { useFilterEffects } from "../../hooks/useFilterEffects";
 
 interface Props {
   className?: string;
 }
 
-export const Filters: React.FC<Props> = ({ className }) => {
-  const effectItems = useFilterItems(effectTypes);
-  const terpeneItems = useFilterItems(terpenes);
-  const typeItems = useFilterItems(types);
+const { itemEffects } = useFilterEffects();
 
+export const Filters: React.FC<Props> = ({ className }) => {
   return (
     <div className={cn(className)}>
       <Title text="Fliters" size="md" className="font-bold" />
@@ -35,9 +32,9 @@ export const Filters: React.FC<Props> = ({ className }) => {
           />
         </div>
 
-        <RenderFilterGroup title="Type" items={typeItems} />
+        {/* <RenderFilterGroup title="Type" items={typeItems} />
         <RenderFilterGroup title="Terpene" items={terpeneItems} />
-        <RenderFilterGroup title="Effects" items={effectItems} />
+        <RenderFilterGroup title="Effects" items={effectItems} /> */}
       </div>
     </div>
   );

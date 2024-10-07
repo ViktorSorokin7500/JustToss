@@ -37,12 +37,12 @@ model Product {
   thcLevel    String
   description String
   terpeneId   Int?
-  effects     Json
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   CartItem    CartItem[]
   type        Type     @relation(fields: [typeId], references: [id])
   terpene     Terpene? @relation(fields: [terpeneId], references: [id])
+  effects     ProductEffect[]
 }
 
 model Terpene {
@@ -55,6 +55,22 @@ model Type {
   id       Int       @id @default(autoincrement())
   name     String
   products Product[]
+}
+
+model Effect {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  ProductEffect ProductEffect[]
+}
+
+model ProductEffect {
+  id        Int     @id @default(autoincrement())
+  productId Int
+  effectId  Int
+  value     Int
+  product   Product @relation(fields: [productId], references: [id])
+  effect    Effect  @relation(fields: [effectId], references: [id])
 }
 
 model Cart {

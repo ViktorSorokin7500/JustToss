@@ -1,23 +1,52 @@
 import { prisma } from "./prisma-client";
 import buds from "../lib/leafly_strain_data.json";
 import { hashSync } from "bcrypt";
-import { types, terpenes } from "../lib/data_details";
+import { types, terpenes, effectTypes } from "../lib/data_details";
 
 async function up() {
   const typeMap: { [key: string]: number } = {};
   for (const type of types) {
-    const createdType = await prisma.type.create({
-      data: { name: type },
+    const existingType = await prisma.type.findFirst({
+      where: { name: type },
     });
-    typeMap[type] = createdType.id;
+    if (!existingType) {
+      const createdType = await prisma.type.create({
+        data: { name: type },
+      });
+      typeMap[type] = createdType.id;
+    } else {
+      typeMap[type] = existingType.id;
+    }
   }
 
   const terpeneMap: { [key: string]: number } = {};
   for (const terpene of terpenes) {
-    const createdTerpene = await prisma.terpene.create({
-      data: { name: terpene },
+    const existingTerpene = await prisma.terpene.findFirst({
+      where: { name: terpene },
     });
-    terpeneMap[terpene] = createdTerpene.id;
+    if (!existingTerpene) {
+      const createdTerpene = await prisma.terpene.create({
+        data: { name: terpene },
+      });
+      terpeneMap[terpene] = createdTerpene.id;
+    } else {
+      terpeneMap[terpene] = existingTerpene.id;
+    }
+  }
+
+  const effectMap: { [key: string]: number } = {};
+  for (const effect of effectTypes) {
+    const existingEffect = await prisma.effect.findFirst({
+      where: { name: effect },
+    });
+    if (!existingEffect) {
+      const createdEffect = await prisma.effect.create({
+        data: { name: effect },
+      });
+      effectMap[effect] = createdEffect.id;
+    } else {
+      effectMap[effect] = existingEffect.id;
+    }
   }
 
   await prisma.user.createMany({
@@ -42,7 +71,7 @@ async function up() {
   const productsData = buds;
 
   for (const product of productsData) {
-    await prisma.product.create({
+    const createdProduct = await prisma.product.create({
       data: {
         id: product.id,
         name: product.name,
@@ -52,27 +81,25 @@ async function up() {
         thcLevel: product.thc_level,
         description: product.description,
         terpeneId: terpeneMap[product.most_common_terpene.toLowerCase()],
-        effects: product.effects,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
     });
-  }
 
-  for (const type of types) {
-    await prisma.type.create({
-      data: {
-        name: type,
-      },
-    });
-  }
-
-  for (const terpene of terpenes) {
-    await prisma.terpene.create({
-      data: {
-        name: terpene,
-      },
-    });
+    for (const [effectName, value] of Object.entries(product.effects)) {
+      const effectId = effectMap[effectName];
+      if (effectId) {
+        await prisma.productEffect.create({
+          data: {
+            product: { connect: { id: createdProduct.id } },
+            effect: { connect: { id: effectId } },
+            value: parseInt(value, 10),
+          },
+        });
+      } else {
+        console.warn(`Effect "${effectName}" not found in effectMap.`);
+      }
+    }
   }
 
   await prisma.cart.createMany({
@@ -104,6 +131,10 @@ async function up() {
 async function down() {
   await prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "Product" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "Effect" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "Type" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "Terpene" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "ProductEffect" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "Cart" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "CartItem" RESTART IDENTITY CASCADE`;
 }

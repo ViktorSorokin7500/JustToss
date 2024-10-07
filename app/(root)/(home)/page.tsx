@@ -1,5 +1,6 @@
 import { Container, Filters, ProductCard, Title } from "@/components/shared";
 import data from "@/lib/leafly_strain_data.json";
+import { prisma } from "@/prisma/prisma-client";
 
 export default async function Home() {
   return (
