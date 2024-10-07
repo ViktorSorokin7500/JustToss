@@ -4,9 +4,14 @@ import { CheckboxFiltersGroup } from "./checkbox-filters-group";
 interface Props {
   title: string;
   items: { text: string; value: string }[];
+  loading: boolean;
 }
 
-export const RenderFilterGroup: React.FC<Props> = ({ title, items }) => {
+export const RenderFilterGroup: React.FC<Props> = ({
+  title,
+  items,
+  loading,
+}) => {
   const defaultItems = items.slice(0, 6);
   return (
     <>
@@ -16,7 +21,7 @@ export const RenderFilterGroup: React.FC<Props> = ({ title, items }) => {
         limit={6}
         items={items}
         defaultItems={defaultItems}
-        loading={false}
+        loading={loading}
       />
     </>
   );

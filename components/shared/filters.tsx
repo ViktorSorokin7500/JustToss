@@ -1,16 +1,32 @@
+"use client";
 import React from "react";
 import { cn } from "@/lib/utils";
 import { RangeSlider, RenderFilterGroup, SortPopup, Title } from ".";
 import { Input } from "../ui";
-import { useFilterEffects } from "../../hooks/useFilterEffects";
+import { useFilterData } from "@/hooks/use-filter-data";
 
 interface Props {
   className?: string;
 }
 
-const { itemEffects } = useFilterEffects();
-
 export const Filters: React.FC<Props> = ({ className }) => {
+  const { effects, terpenes, types, loading } = useFilterData();
+
+  const effectItems = effects.map((effect) => ({
+    value: String(effect.id),
+    text: effect.name.replace(/_/g, " "),
+  }));
+
+  const typeItems = types.map((type) => ({
+    value: String(type.id),
+    text: type.name,
+  }));
+
+  const terpeneItems = terpenes.map((terpene) => ({
+    value: String(terpene.id),
+    text: terpene.name,
+  }));
+
   return (
     <div className={cn(className)}>
       <Title text="Fliters" size="md" className="font-bold" />
@@ -32,9 +48,21 @@ export const Filters: React.FC<Props> = ({ className }) => {
           />
         </div>
 
-        {/* <RenderFilterGroup title="Type" items={typeItems} />
-        <RenderFilterGroup title="Terpene" items={terpeneItems} />
-        <RenderFilterGroup title="Effects" items={effectItems} /> */}
+        <RenderFilterGroup
+          title="Type"
+          items={typeItems}
+          loading={loading.types}
+        />
+        <RenderFilterGroup
+          title="Terpene"
+          items={terpeneItems}
+          loading={loading.terpenes}
+        />
+        <RenderFilterGroup
+          title="Effects"
+          items={effectItems}
+          loading={loading.effects}
+        />
       </div>
     </div>
   );
