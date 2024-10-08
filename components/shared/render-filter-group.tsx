@@ -6,6 +6,7 @@ interface Props {
   items: { text: string; value: string }[];
   loading: boolean;
   onChange: (selectedValues: string[]) => void;
+  defaultValue?: string[];
 }
 
 export const RenderFilterGroup: React.FC<Props> = ({
@@ -13,8 +14,10 @@ export const RenderFilterGroup: React.FC<Props> = ({
   items,
   loading,
   onChange,
+  defaultValue,
 }) => {
   const defaultItems = items.slice(0, 6);
+
   return (
     <>
       <div className="w-full h-[1px] bg-gray-200" />
@@ -25,6 +28,7 @@ export const RenderFilterGroup: React.FC<Props> = ({
         defaultItems={defaultItems}
         loading={loading}
         onChange={onChange}
+        defaultValue={defaultValue}
       />
     </>
   );

@@ -4,9 +4,7 @@ import React from "react";
 import data from "@/lib/leafly_strain_data.json";
 import { ProductCard } from "./product-card";
 
-interface Props {}
-
-export const ProductList: React.FC<Props> = () => {
+export const ProductList = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 9;
 

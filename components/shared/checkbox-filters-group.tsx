@@ -36,6 +36,8 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
     defaultValue || []
   );
 
+  console.log("checkedValues =>", defaultValue);
+
   const list = showAll
     ? items.filter((item) =>
         item.text.toLowerCase().includes(searchValue.toLowerCase())
