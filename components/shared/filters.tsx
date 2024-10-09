@@ -4,79 +4,29 @@ import { RangeSlider, RenderFilterGroup, SortPopup, Title } from ".";
 import { Input } from "../ui";
 import { useFilterData } from "@/hooks/use-filter-data";
 import { cn, mapItems } from "@/lib";
-import qs from "qs";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useFilters } from "@/hooks/use-filters";
 
 interface Props {
   className?: string;
 }
 
-interface PriceProps {
-  priceFrom?: number;
-  priceTo?: number;
-}
-
-interface QueryFilters extends PriceProps {
-  sortBy?: string;
-  types: string;
-  terpenes: string;
-  effects: string;
-}
-
 export const Filters: React.FC<Props> = ({ className }) => {
-  const searchParams = useSearchParams() as unknown as Map<
-    keyof QueryFilters,
-    string
-  >;
-  const router = useRouter();
   const { effects, terpenes, types, loading } = useFilterData();
 
-  const [sortBy, setSortBy] = React.useState<string | undefined>(
-    searchParams.get("sortBy") ?? undefined
-  );
+  const {
+    sortBy,
+    setSortBy,
+    selectedFilters,
+    updateSelectedFilters,
+    prices,
+    updatePrice,
+  } = useFilters();
 
-  const [selectedFilters, setSelectedFilters] = React.useState({
-    types: searchParams.get("types")?.split(",") ?? ([] as string[]),
-    terpenes: searchParams.get("terpenes")?.split(",") ?? ([] as string[]),
-    effects: searchParams.get("effects")?.split(",") ?? ([] as string[]),
-  });
-
-  const [prices, setPrice] = React.useState<PriceProps>({
-    priceFrom: Number(searchParams.get("priceFrom")) || undefined,
-    priceTo: Number(searchParams.get("priceTo")) || undefined,
-  });
-
-  const updateSelectedFilters = (
-    filterName: keyof typeof selectedFilters,
-    selectedValues: string[]
-  ) => {
-    setSelectedFilters((prev) => ({
-      ...prev,
-      [filterName]: selectedValues,
-    }));
-  };
+  console.log("first", selectedFilters);
 
   const effectItems = mapItems(effects);
   const typeItems = mapItems(types);
   const terpeneItems = mapItems(terpenes);
-
-  const updatePrice = (name: keyof PriceProps, value: number) => {
-    setPrice({ ...prices, [name]: value });
-  };
-
-  React.useEffect(() => {
-    const filters = {
-      ...prices,
-      sortBy,
-      types: selectedFilters.types,
-      terpenes: selectedFilters.terpenes,
-      effects: selectedFilters.effects,
-    };
-
-    const query = qs.stringify(filters, { arrayFormat: "comma" });
-
-    router.push(`?${query}`, { scroll: false });
-  }, [prices, selectedFilters, sortBy, router]);
 
   return (
     <div className={cn(className)}>
@@ -90,7 +40,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
               type="number"
               placeholder="0"
               min={0}
-              max={10}
+              max={9.5}
               value={String(prices.priceFrom)}
               onChange={(e) => updatePrice("priceFrom", Number(e.target.value))}
             />
@@ -98,7 +48,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
               type="number"
               min={1}
               max={10}
-              placeholder="1000"
+              placeholder="10"
               value={String(prices.priceTo)}
               onChange={(e) => updatePrice("priceTo", Number(e.target.value))}
             />
@@ -109,9 +59,10 @@ export const Filters: React.FC<Props> = ({ className }) => {
             max={10}
             step={0.1}
             value={[prices.priceFrom || 0, prices.priceTo || 10]}
-            onValueChange={([priceFrom, priceTo]) =>
-              setPrice({ priceFrom, priceTo })
-            }
+            onValueChange={([priceFrom, priceTo]) => {
+              updatePrice("priceFrom", priceFrom);
+              updatePrice("priceTo", priceTo);
+            }}
             className="pb-2"
           />
         </div>
