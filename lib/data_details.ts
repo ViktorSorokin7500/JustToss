@@ -37,3 +37,28 @@ export const terpenes = [
 ];
 
 export const types = ["Hybrid", "Sativa", "Indica"];
+
+export const effectCriteria = {
+  good: [
+    "happy",
+    "euphoric",
+    "uplifted",
+    "stress",
+    "depression",
+    "pain",
+    "anxiety",
+    "insomnia",
+    "hungry",
+    "talkative",
+    "ptsd",
+    "creative",
+    "energetic",
+    "focused",
+    "giggly",
+    "nausea",
+    "inflammation",
+    "relaxed",
+  ],
+  neutral: ["sleepy", "fatigue", "lack_of_appetite", "headache"],
+  bad: ["dry_mouth", "dry_eyes", "dizzy", "paranoid", "anxious"],
+};

@@ -10,3 +10,4 @@ export { ProductCard } from "./product-card";
 export { ProductList } from "./product-list";
 export { RenderFilterGroup } from "./render-filter-group";
 export { SearchInput } from "./search-input";
+export { EffectsList } from "./effects-list";
