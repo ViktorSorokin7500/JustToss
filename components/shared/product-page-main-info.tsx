@@ -1,5 +1,4 @@
 import React from "react";
-import { cn } from "@/lib/utils";
 import { Button } from "../ui";
 import { EffectsList } from "./effects-list";
 
@@ -34,11 +33,11 @@ interface Props {
 
 export const ProductPageMainInfo: React.FC<Props> = ({ product }) => {
   return (
-    <div className="flex items-center px-2 gap-20">
+    <div className="flex flex-col md:flex-row items-center px-2 gap-5 md:gap-20">
       <div className="space-y-4">
         <div className="flex justify-center p-6 bg-green-50 rounded-full size-[320px]">
           <img
-            className="size-[270px] rounded-full"
+            className="size-[270px] rounded-full shadow-lg"
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/800px-No_image_available.svg.png"
             alt={product.name}
           />

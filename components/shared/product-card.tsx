@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Title } from "./title";
 import { Button } from "../ui";
-import { Plus } from "lucide-react";
 
 interface Props {
   id: number;
@@ -60,8 +59,7 @@ export const ProductCard: React.FC<Props> = ({
           </span>
 
           <Button variant="secondary" className="text-base font-bold">
-            <Plus size={20} className="mr-1" />
-            Add
+            More
           </Button>
         </div>
       </Link>
